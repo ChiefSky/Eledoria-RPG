@@ -66,6 +66,48 @@ def meetShop():
             print("Я такое не продаю")
                 
 
+def meetMonster():
+    global hp 
+    global coins
+    
+    monsterLvl = rand.randint(1,3)
+    monsterHp = monsterLvl
+    monsterDamage = monsterLvl 
+    monsters = ["Гоблин", "Нежить", "Голем", "Калека"]
+    monster = rand.choice(monsters)
+    
+    print("Вы встретили монстра - {0}, у него {1} уровень, {2} здоровья и {3} атаки".format(monster, monsterLvl, monsterHp, monsterDamage))
+    printParemeters()
+    
+    while monsterHp > 0:
+        choice = input("Что будешь делать? (атака/побег): ").lower()
+        
+        if choice == "атака":
+            monsterHp -= damage
+            print("ты атаковал монстра и у него осталось", monsterHp, "здоровья")
+        elif choice == "побег":
+            chance = rand.randint(0, monsterLvl)
+            if chance == 0:
+                print("Тебе удалось сбежать от монстра")
+                break
+            else:
+                print("Вы пытались сбежать, но монстр догнал вас...")
+        else:
+            continue
+        
+        if monsterHp > 0:
+            hp -= monsterDamage
+            print("Монстр атаковал и у вас осталось", hp, "здоровья")
+            
+        if hp <= 0:
+            break
+    else:
+        loot = rand.randint(0,3) + monsterLvl
+        coins += loot
+        print("Ты одолел монстра! твоя награда - ", loot, "монет")
+        printCoins()
+    
+    
 def initGame(initHp, initDamage, initCoins):
     global hp
     global damage
@@ -83,12 +125,12 @@ def gameLoop():
     if situation == 0:
         meetShop()
     elif situation == 1:
-        input("Вы встретили монстра")
+        meetMonster
     else:
         input("Блуждаем...")
         
         
-initGame(3, 1, 999)
+initGame(3, 1, 50)
 
 while True:
     gameLoop()
